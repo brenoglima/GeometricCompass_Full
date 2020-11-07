@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -69,6 +70,7 @@ namespace GeometricTools
 
     Point center;
     RotateTransform rotation;
+    double initialAngle;
     private void thumbCentro_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
     {
       center = new Point((double)this.GetValue(Canvas.LeftProperty) + this.Width / 2, (double)this.GetValue(Canvas.TopProperty) + this.Height / 2);
@@ -79,50 +81,38 @@ namespace GeometricTools
     {
       Point pos = Mouse.GetPosition(this);
 
-      double deltaX = pos.X - center.X;
-      double deltaY = pos.Y - center.Y;
+      Point currentPoint = Mouse.GetPosition((UIElement)mw);
+      Vector deltaVector = Point.Subtract(currentPoint, center);
 
-      if (deltaY.Equals(0))
+      double angle = Vector.AngleBetween(this.startVector, deltaVector);
+
+      var destAngle = this.initialAngle + Math.Round(angle, 0);
+
+      //if (!Keyboard.IsKeyDown(Key.LeftCtrl)) destAngle = ((int)destAngle / 15) * 15;
+
+      RenderTransform = new RotateTransform() { Angle = destAngle };
+      Console.WriteLine($"ANGLE={destAngle}, StartVector={startVector} CurrentPoint={currentPoint}");
+    }
+    Vector startVector;
+    bool isRotated = false;
+    private void thumbPontaPencil_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+    {
+      Point startPoint = Mouse.GetPosition((UIElement)Parent);
+      this.startVector = Point.Subtract(startPoint, center);
+      if (!isRotated)
       {
-
-        return;
-      }
-
-      double tan = deltaX / deltaY;
-      double angle = Math.Atan(tan);
-
-      // Convert to degrees.
-      angle = angle * 180 / Math.PI;
-
-      // If the mouse crosses the vertical center,
-      // find the complementary angle.
-      if (deltaY > 0)
-      {
-        angle = 180 - Math.Abs(angle);
-      }
-
-      // Rotate left if the mouse moves left and right
-      // if the mouse moves right.
-      if (deltaX < 0)
-      {
-        angle = -Math.Abs(angle);
+        this.initialAngle = 0;
+        isRotated = true;
       }
       else
       {
-        angle = Math.Abs(angle);
+        this.initialAngle = ((RotateTransform)RenderTransform).Angle;
       }
-
-      if (Double.IsNaN(angle))
-      {
-        return;
-      }
-
-      // Apply the rotation to the strokes' outline.
-      rotation = new RotateTransform(angle);
-      RenderTransform = rotation;
     }
 
-    private void thumbPontaPencil_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+    public MainWindow mw;
+
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
     {
 
     }

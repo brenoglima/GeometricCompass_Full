@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GeometricTools"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Loaded="Window_Loaded" Width="800">
     <Grid>
         <Button Width="50" Height="30" Content="Click" VerticalAlignment="Top" />
         <Canvas x:Name="CanvasCompass">
-            <local:DSCompass Width="500" Height="60" Canvas.Left="200" Canvas.Top="200" />
+            <local:DSCompass x:Name="Compasso" Width="500" Height="60" Canvas.Left="200" Canvas.Top="200" />
         </Canvas>
     </Grid>
 </Window>

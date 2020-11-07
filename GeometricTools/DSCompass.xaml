@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GeometricTools"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="60" d:DesignWidth="300" Loaded="UserControl_Loaded">
     <!-- <Grid Background="#48CCCCCC" Height="40"> -->
     <Grid Height="60" SnapsToDevicePixels="True">
         <Grid>
@@ -24,7 +24,6 @@
             </Path>
 
             <Rectangle Fill="#999" Height="40" Grid.Column="1" />
-
 
             <Thumb Grid.Column="2" x:Name="thumbCentro" DragDelta="thumbCentro_DragDelta" DragStarted="thumbCentro_DragStarted">
                 <Thumb.Style>
